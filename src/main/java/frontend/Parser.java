@@ -17,11 +17,11 @@ import message.MessageProducer;
  * <p>A language independent framework class. This abstract parser class will be implemented by language -specific subclasses.</p>
  */
 public abstract class Parser implements MessageProducer{
-    protected  static SymTab symtab;
+    protected  static SymTab symTab;
     protected static MessageHandler messageHandler;
 
     static {
-        symtab = null;
+        symTab = null;
         messageHandler = new MessageHandler();
     }
     protected Scanner scanner;
@@ -87,5 +87,13 @@ public abstract class Parser implements MessageProducer{
      */
     public void sendMessage(Message message) {
         messageHandler.sendMessage(message);
+    }
+
+    public ICode getICode() {
+        return this.iCode;
+    }
+
+    public SymTab getSymTab() {
+        return this.symTab;
     }
 }
