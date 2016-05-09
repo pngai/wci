@@ -67,4 +67,8 @@ public class Token {
     protected char peekChar() throws Exception {
         return source.peekChar();
     }
+
+    public Number getLineNumber() {
+        return lineNum;
+    }
 }

@@ -46,7 +46,7 @@ public abstract class Parser implements MessageProducer{
      * Return the number of syntax errors found by the parser. To be implemented by a language specific parser subclass.
      * @return the error count.
      */
-    public abstract int getErrotCount();
+    public abstract int getErrorCount();
 
     /**
      * Call the scanner's currentToken() method.
