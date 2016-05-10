@@ -1,12 +1,12 @@
-program hello (output);
+PROGRAM hello (output);
 
-{Escribir 'Hola mundo.' 10 veces.}
+{write 'Hello, world.' ten times.}
 
-var i : integer;
+VAR
+    i : integer;
 
-begin {hello}
-    for i := 1 to 10 do
-    begin
-        writeln('Hola mundo.');
-    end;
-end. {hello}
+BEGIN {hello}
+    for i := 1 to 10 DO BEGIN
+        writeln('Hello, world.');
+    END;
+END {hello}.
