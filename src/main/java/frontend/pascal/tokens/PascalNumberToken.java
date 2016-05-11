@@ -9,6 +9,8 @@ import frontend.pascal.PascalTokenType;
  * Created by patrick on 2016/5/10.
  */
 public class PascalNumberToken extends PascalToken{
+    private static final int MAX_EXPONENT = 37;
+
     /**
      * Constructor.
      *
@@ -169,7 +171,7 @@ public class PascalNumberToken extends PascalToken{
             exponentValue -= fractionDigits.length();
             digits += fractionDigits;
         }
-        if(Math.abs(exponentValue + wholeDigits.length()) > Double.MAX_EXPONENT) {
+        if(Math.abs(exponentValue + wholeDigits.length()) > MAX_EXPONENT) {
             type = PascalTokenType.ERROR;
             value = PascalErrorCode.RANGE_REAL;
             return 0.0f;
