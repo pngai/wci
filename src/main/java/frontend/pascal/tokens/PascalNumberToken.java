@@ -143,7 +143,7 @@ public class PascalNumberToken extends PascalToken{
         //loop over digits to compute integer value as long as no overflow occurs
         while ((index < digits.length()) && (integerValue >= prevValue)) {
             prevValue = integerValue;
-            integerValue = 10*integerValue + Character.getNumericValue(digits.charAt(index));
+            integerValue = 10*integerValue + Character.getNumericValue(digits.charAt(index++));
         }
         //No overflow
         if(integerValue >= prevValue) {
