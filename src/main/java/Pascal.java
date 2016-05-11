@@ -11,9 +11,11 @@ import frontend.TokenType;
 import frontend.pascal.PascalTokenType;
 import intermediate.ICode;
 import intermediate.SymTab;
+import intermediate.SymTabStack;
 import message.Message;
 import message.MessageListener;
 import message.MessageType;
+import util.CrossReferencer;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -27,7 +29,7 @@ public class Pascal {
     private Parser parser;
     private Source source;
     private ICode iCode;
-    private SymTab symTab;
+    private SymTabStack symTabStack;
     private Backend backend;
 
     public Pascal(String operation, String filePath, String flags){
@@ -47,9 +49,14 @@ public class Pascal {
             source.close();
 
             iCode = parser.getICode();
-            symTab = parser.getSymTab();
+            symTabStack = parser.getSymTabStack();
 
-            backend.process(iCode,symTab);
+            if(xref) {
+                CrossReferencer crossReferencer = new CrossReferencer();
+                crossReferencer.print(symTabStack);
+            }
+
+            backend.process(iCode,symTabStack);
         } catch (Exception ex) {
             System.out.println("[*] Internal translator error.");
             ex.printStackTrace();

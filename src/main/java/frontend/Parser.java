@@ -95,7 +95,7 @@ public abstract class Parser implements MessageProducer{
         return this.iCode;
     }
 
-    public SymTab getSymTab() {
-        return this.symTabStack.getLocalSymTab();
+    public SymTabStack getSymTabStack() {
+        return this.symTabStack;
     }
 }

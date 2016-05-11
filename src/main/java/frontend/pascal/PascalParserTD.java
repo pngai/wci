@@ -1,6 +1,8 @@
 package frontend.pascal;
 
 import frontend.*;
+import intermediate.SymTab;
+import intermediate.SymTabEntry;
 import message.Message;
 import message.MessageType;
 
@@ -42,7 +44,17 @@ public class PascalParserTD extends Parser{
             while(!((token = nextToken()) instanceof EofToken)) {
                 TokenType tokentype = token.getType();
 
-                if(tokentype != PascalTokenType.ERROR) {
+                //Xref identifiers only
+                if(tokentype == PascalTokenType.IDENTIFIER) {
+                    String name = token.getText().toLowerCase();
+                    // create an entry ans push it to symbol table if it's not in it.
+                    SymTabEntry entry = symTabStack.lookup(name);
+                    if(entry == null) {
+                        entry = symTabStack.enterLocal(name);
+                    }
+                    entry.appendLineNumber(token.getLineNumber());
+                }
+                else if(tokentype != PascalTokenType.ERROR) {
                     sendMessage(new Message(MessageType.TOKEN, new Object[]{token.getLineNumber(),
                     token.getPosition(), tokentype, token.getText(), token.getValue()}));
                 } else {
