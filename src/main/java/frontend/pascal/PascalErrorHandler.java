@@ -28,7 +28,6 @@ public class PascalErrorHandler {
      * @param token the bad token.
      * @param errorCode the error code.
      * @param parser the parser.
-     * @return the flagger string.
      */
     public void flag(Token token, PascalErrorCode errorCode, Parser parser) {
         parser.sendMessage(new Message(MessageType.SYNTAX_ERROR, new Object[]{token.getLineNumber(),
