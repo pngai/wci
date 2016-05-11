@@ -19,6 +19,7 @@ public class Token {
 
     /**
      * Constructor.
+     *
      * @param source the source from where to fetch the token's characters.
      * @throws Exception if an error occurred.
      */
@@ -70,5 +71,21 @@ public class Token {
 
     public Number getLineNumber() {
         return lineNum;
+    }
+
+    public TokenType getType() {
+        return type;
+    }
+
+    public String getText() {
+        return text;
+    }
+
+    public Object getValue() {
+        return value;
+    }
+
+    public int getPosition() {
+        return position;
     }
 }

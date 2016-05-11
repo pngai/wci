@@ -7,6 +7,8 @@ import backend.BackendFactory;
 import frontend.FrontendFactory;
 import frontend.Parser;
 import frontend.Source;
+import frontend.TokenType;
+import frontend.pascal.PascalTokenType;
 import intermediate.ICode;
 import intermediate.SymTab;
 import message.Message;
@@ -56,6 +58,21 @@ public class Pascal {
 
     private static final String FLAGS = "[-ix]";
     private static final String USAGE = "Usage: Pascal execute|compile " + FLAGS + " <source file path>";
+    private static final String SOURCE_LINE_FORMAT = "%03d %s";
+    private static final String PARSER_SUMMARY_FORMAT =
+            "\n%,20d source lines." +
+            "\n%,20d syntax errors." +
+            "\n%,20.2f seconds total parsing time.\n";
+    private static final String INTERPRETER_SUMMARY_FORMAT =
+            "\n%,20d statements executed." +
+            "\n%,20d runtime errors." +
+            "\n%20.2f seconds total execution time.\n";
+    private static final String COMPILER_SUMMARY_FORMAT =
+            "\n%,20d instructions generated." +
+            "\n%20.2f seconds total code generation time.\n";
+    private static final String TOKEN_FORMAT = ">>> %-15s line=%03d, pos=%2d, text=\"%s\"";
+    private static final String VALUE_FORMAT = ">>>                 value=%s";
+    private static final int PREFIX_WIDTH = 5;
 
     public static void main (String args[]) {
         try {
@@ -84,8 +101,6 @@ public class Pascal {
         }
     }
 
-    private static final String SOURCE_LINE_FORMAT = "%03d %s";
-
     /**
      * Listener for source messages.
      */
@@ -110,10 +125,7 @@ public class Pascal {
         }
     }
 
-    private static final String PARSER_SUMMARY_FORMAT =
-            "\n%,20d source lines." +
-            "\n%,20d syntax errors." +
-            "\n%,20.2f seconds total parsing time.\n";
+
 
     /**
      * Listener for parser messages.
@@ -136,17 +148,49 @@ public class Pascal {
                     System.out.printf(PARSER_SUMMARY_FORMAT, statementCount, syntaxErrors, elapsedTime);
                     break;
                 }
+                case TOKEN: {
+                    Object body[] = (Object []) message.getBody();
+                    int line = (Integer) body[0];
+                    int position = (Integer) body[1];
+                    TokenType tokenType = (TokenType) body[2];
+                    String tokenText = (String) body[3];
+                    Object tokenValue = body[4];
+
+                    System.out.println(String.format(TOKEN_FORMAT, tokenType, line, position, tokenText));
+
+                    if(tokenValue != null) {
+                        if(tokenType == PascalTokenType.STRING) {
+                            tokenValue = "\"" + tokenValue + "\"";
+                        }
+                        System.out.println(String.format(VALUE_FORMAT, tokenValue));
+                    }
+                    break;
+                }
+                case SYNTAX_ERROR:{
+                    Object body[] = (Object []) message.getBody();
+                    int lineNumber = (Integer) body[0];
+                    int position = (Integer) body[1];
+                    String tokenText = (String) body[2];
+                    String errorMessage = (String) body[3];
+
+                    int spaceCount = PREFIX_WIDTH + position;
+                    StringBuilder flagBuffer = new StringBuilder();
+                    for(int i = 1; i < spaceCount; ++i){
+                        flagBuffer.append(" ");
+                    }
+                    flagBuffer.append("^\n*** ").append(errorMessage);
+
+                    if(tokenText != null) {
+                        flagBuffer.append(" [at \"").append(tokenText).append("\"]");
+                    }
+                    System.out.println(flagBuffer.toString());
+                    break;
+                }
             }
         }
     }
 
-    private static final String INTERPRETER_SUMMARY_FORMAT =
-            "\n%,20d statements executed." +
-            "\n%,20d runtime errors." +
-            "\n%20.2f seconds total execution time.\n";
-    private static final String COMPILER_SUMMARY_FORMAT =
-            "\n%,20d instructions generated." +
-            "\n%20.2f seconds total code generation time.\n";
+
 
     /**
      * Listen for backend messages;
