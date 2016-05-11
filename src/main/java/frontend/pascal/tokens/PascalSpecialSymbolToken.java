@@ -44,7 +44,6 @@ public class PascalSpecialSymbolToken extends PascalToken {
                     text += currentChar;
                     nextChar();  // consume '='
                 }
-
                 break;
             }
             // < or <= or <>
@@ -59,7 +58,6 @@ public class PascalSpecialSymbolToken extends PascalToken {
                     text += currentChar;
                     nextChar();  // consume '>'
                 }
-
                 break;
             }
             // > or >=
@@ -70,7 +68,6 @@ public class PascalSpecialSymbolToken extends PascalToken {
                     text += currentChar;
                     nextChar();  // consume '='
                 }
-
                 break;
             }
             // . or ..
@@ -81,7 +78,6 @@ public class PascalSpecialSymbolToken extends PascalToken {
                     text += currentChar;
                     nextChar();  // consume '.'
                 }
-
                 break;
             }
             default: {
@@ -89,11 +85,10 @@ public class PascalSpecialSymbolToken extends PascalToken {
                 type = PascalTokenType.ERROR;
                 value = PascalErrorCode.INVALID_CHARACTER;
             }
-            // Set the type if it wasn't an error.
-            if (type == null) {
-                type = PascalTokenType.SPECIAL_SYMBOLS.get(text);
-            }
-
+        }
+        // Set the type if it wasn't an error.
+        if (type == null) {
+            type = PascalTokenType.SPECIAL_SYMBOLS.get(text);
         }
     }
 }
