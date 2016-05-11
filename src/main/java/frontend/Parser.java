@@ -2,6 +2,8 @@ package frontend;
 
 import intermediate.ICode;
 import intermediate.SymTab;
+import intermediate.SymTabFactory;
+import intermediate.SymTabStack;
 import message.Message;
 import message.MessageHandler;
 import message.MessageListener;
@@ -17,11 +19,11 @@ import message.MessageProducer;
  * <p>A language independent framework class. This abstract parser class will be implemented by language -specific subclasses.</p>
  */
 public abstract class Parser implements MessageProducer{
-    protected  static SymTab symTab;
+    protected static SymTabStack symTabStack;
     protected static MessageHandler messageHandler;
 
     static {
-        symTab = null;
+        symTabStack = SymTabFactory.createSymTabStack();
         messageHandler = new MessageHandler();
     }
     protected Scanner scanner;
@@ -94,6 +96,6 @@ public abstract class Parser implements MessageProducer{
     }
 
     public SymTab getSymTab() {
-        return this.symTab;
+        return this.symTabStack.getLocalSymTab();
     }
 }
